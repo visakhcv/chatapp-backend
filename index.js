@@ -58,6 +58,13 @@ app.get('/messages/:userId', async (req, res) => {
     res.json(messages)
 });
 
+app.get('/userdetails/:userid',async(req,res)=>{
+    const {userid} = req.params
+    console.log({userid});
+    const userdetail= await user.find( {_id: userid})
+    res.status(200).json(userdetail)
+})
+
 app.get('/people', async (req, res) => {
     const users = await user.find({}, { '_id': 1, username: 1 })
     res.json(users)
@@ -77,6 +84,8 @@ app.get('/profile', (req, res) => {
     }
 
 })
+
+
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
@@ -121,7 +130,7 @@ app.post('/register', async (req, res) => {
 
 })
 
-const server = app.listen(4000)
+const server = app.listen(process.env.PORT ||4000)
 
 const wss = new ws.WebSocketServer({ server })
 wss.on('connection', (connection, req) => {
